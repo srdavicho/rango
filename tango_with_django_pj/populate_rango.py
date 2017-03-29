@@ -12,32 +12,33 @@ def populate():
  # This might seem a little bit confusing, but it allows us to iterate
  # through each data structure, and add the data to our models.
 
-	python_pages = [
-		{"title":"Official Python Tutorial","url":"http://docs.python.org/2/tutorial/"},
-		{"title":"How to Think like a Computer Scientist","url":"http://www.greenteapress.com/thinkpython/"},
-		{"title":"Learn Python in 10 Minutes","url":"http://www.korokithakis.net/tutorials/python/"}
+	Python_pages = [
+		{"title":"Official Python Tutorial","url":"http://docs.python.org/2/tutorial/", "views":128},
+		{"title":"How to Think like a Computer Scientist","url":"http://www.greenteapress.com/thinkpython/", "views":64},
+		{"title":"Learn Python in 10 Minutes","url":"http://www.korokithakis.net/tutorials/python/", "views":32}
 		]
 
 	Django_pages = [
-		{"title":"Official Django Tutorial","url":"https://docs.djangoproject.com/en/1.9/intro/tutorial01/"},
-		{"title":"Django Rocks","url":"http://www.djangorocks.com/"},
-		{"title":"How to Tango with Django","url":"http://www.tangowithdjango.com/"}
+		{"title":"Official Django Tutorial","url":"https://docs.djangoproject.com/en/1.9/intro/tutorial01/", "views":258},
+		{"title":"Django Rocks","url":"http://www.djangorocks.com/", "views":196},
+		{"title":"How to Tango with Django","url":"http://www.tangowithdjango.com/", "views":208}
 		]
 
 	Other_pages = [
-		{"title":"Bottle","url":"http://bottlepy.org/docs/dev/"},
-		{"title":"Flask","url":"http://flask.pocoo.org"}
+		{"title":"Bottle","url":"http://bottlepy.org/docs/dev/", "views":12},
+		{"title":"Flask","url":"http://flask.pocoo.org", "views":24}
 		]
 
-	cats = {"Python": {"pages":python_pages},
-			"Django": {"pages":Django_pages},
-			"Other Frameworks":{"pages":Other_pages}
+	cats = {"Python": {"pages":Python_pages, "views":128, "likes":64},
+			"Django": {"pages":Django_pages, "views":64, "likes":32},
+			"Other Frameworks":{"pages":Other_pages, "views":32, "likes":16}
 			}
 
-	for cat, cat_data in cats.iteritems(): #cats.items() in python 3
-		c = add_cat(cat)
+	for cat, cat_data in cats.items(): #cats.iteritems() in python 2
+
+		c = add_cat(cat,cat_data["views"],cat_data["likes"])
 		for p in cat_data["pages"]:
-			add_page(c, p["title"], p["url"])
+			add_page(c, p["title"], p["url"], p["views"])
 
 	# Print out the categories we have added.
 	for c in Category.objects.all():
@@ -51,8 +52,8 @@ def add_page(cat, title, url, views=0):
 	p.save()
 	return p
 
-def add_cat(name):
-	c = Category.objects.get_or_create(name=name)[0]
+def add_cat(name, views, likes):
+	c = Category.objects.get_or_create(name=name, views=views, likes=likes)[0]
 	c.save()
 	return c
 
